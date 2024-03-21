@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using AspNetCore.Identity.Mongo.Migrations;
+////using AspNetCore.Identity.Mongo.Migrations;
 using AspNetCore.Identity.Mongo.Model;
 using AspNetCore.Identity.Mongo.Mongo;
 using AspNetCore.Identity.Mongo.Stores;
@@ -79,13 +79,13 @@ namespace AspNetCore.Identity.Mongo
             var dbOptions = new MongoIdentityOptions();
             setupDatabaseAction(dbOptions);
 
-            var migrationCollection = MongoUtil.FromConnectionString<MigrationHistory>(dbOptions, dbOptions.MigrationCollection);
-            var migrationUserCollection = MongoUtil.FromConnectionString<MigrationMongoUser<TKey>>(dbOptions, dbOptions.UsersCollection);
+            //var migrationCollection = MongoUtil.FromConnectionString<MigrationHistory>(dbOptions, dbOptions.MigrationCollection);
+            //var migrationUserCollection = MongoUtil.FromConnectionString<MigrationMongoUser<TKey>>(dbOptions, dbOptions.UsersCollection);
             var userCollection = MongoUtil.FromConnectionString<TUser>(dbOptions, dbOptions.UsersCollection);
             var roleCollection = MongoUtil.FromConnectionString<TRole>(dbOptions, dbOptions.RolesCollection);
 
             // apply migrations before identity services resolved
-            Migrator.Apply<MigrationMongoUser<TKey>, TRole, TKey>(migrationCollection, migrationUserCollection, roleCollection);
+            //Migrator.Apply<MigrationMongoUser<TKey>, TRole, TKey>(migrationCollection, migrationUserCollection, roleCollection);
 
             var builder = services.AddIdentity<TUser, TRole>(setupIdentityAction ?? (x => { }));
 
