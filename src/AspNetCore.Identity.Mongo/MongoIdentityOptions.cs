@@ -6,7 +6,7 @@ namespace AspNetCore.Identity.Mongo
 {
     public class MongoIdentityOptions
     {
-        public string ConnectionString { get; set; } = "mongodb://localhost/default";
+        public string ConnectionString { get; set; } = "mongodb://localhost/facilitate";
 
         public string UsersCollection { get; set; } = "Users";
 
