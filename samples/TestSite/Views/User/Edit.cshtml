@@ -2,7 +2,13 @@
 @inject UserManager<MongoDbUser> _userManager;
 @using SampleSite.Identity
 @using Microsoft.AspNetCore.Identity
+
+
 @model TestSite.Models.MongoDbUserViewModel
+
+@* @model SampleSite.Identity.AccountViewModels.RegisterViewModel *@
+
+@* @model TestSite.Models.EditUserViewModel *@
 
 @{
     ViewData["Title"] = "Edit";
@@ -20,6 +26,31 @@
             <section>
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+@*                     <div class="form-group">
+                        <label asp-for="FirstName"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="LastName"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Phone"></label>
+                        <input asp-for="Phone" class="form-control" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div> *@
+
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
                     <div class="form-group">
                         <label asp-for="UserName" class="control-label"></label>
                         <input asp-for="UserName" class="form-control" />

@@ -7,9 +7,18 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.panel-registration {
+    border: solid 1px #c0c0c0 !important;
+    -moz-border-radius: 5px !important;
+    -webkit-border-radius: 5px !important;
+    border-radius: 5px !important;
+    padding: 25px !important;
+    margin-bottom: 25px !important;
+}
+
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 .btn-primary {

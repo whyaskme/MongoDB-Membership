@@ -19,6 +19,9 @@ using System.Collections.Generic;
 using Constants = Facilitate.Libraries.Models.Constants;
 using System.Reflection.Metadata;
 
+using Address = TestSite.Services.Identity.Address;
+//using Address = Facilitate.Libraries.Models.Address;
+
 namespace SampleSite.Controllers
 {
     [Authorize]
@@ -257,8 +260,18 @@ namespace SampleSite.Controllers
                 phone.AreaCode = Int32.Parse(areacode);
                 phone.Exchange = Int32.Parse(exchange);
                 phone.Number = Int32.Parse(number);
-
                 user.Profile.Contact.Phone.Add(phone);
+
+                user.PhoneNumber = "( " + areacode + ") " + " " + exchange + "-" + phone;
+
+                Address address = new Address();
+                address.Address1 = model.Address1;
+                address.Address2 = model.Address2;
+                address.City = model.City;
+                address.State = model.State;
+                address.ZipCode = Int32.Parse(model.Zipcode);
+
+                user.Profile.Contact.Address.Add(address);
 
                 // Add user roles
                 user.Roles.Add(Constants.UserRoles.SystemAdministrator.Item1.ToString());
