@@ -20,6 +20,9 @@ using Constants = Facilitate.Libraries.Models.Constants;
 using System.Reflection.Metadata;
 
 using Address = TestSite.Services.Identity.Address;
+using MongoDB.Bson;
+using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
 //using Address = Facilitate.Libraries.Models.Address;
 
 namespace SampleSite.Controllers
@@ -32,6 +35,8 @@ namespace SampleSite.Controllers
         private readonly SignInManager<MongoDbUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+
+        public TextInfo textinfo = new CultureInfo("en-US", false).TextInfo;
 
         public AccountController(
             UserManager<MongoDbUser> userManager,
@@ -228,6 +233,8 @@ namespace SampleSite.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                Utils utils = new Utils();
+
                 var user = new MongoDbUser { UserName = model.Username, Email = model.Email };
 
                 user.PhoneNumber = model.Phone;
@@ -264,12 +271,28 @@ namespace SampleSite.Controllers
 
                 user.PhoneNumber = "( " + areacode + ") " + " " + exchange + "-" + phone;
 
+                ZipCode zipCode = utils.GetGeoLocationInfoByZipCode(Int32.Parse(model.Zipcode));
+
                 Address address = new Address();
                 address.Address1 = model.Address1;
                 address.Address2 = model.Address2;
-                address.City = model.City;
-                address.State = model.State;
-                address.ZipCode = Int32.Parse(model.Zipcode);
+
+                address.City = zipCode.City;
+                address.CityId = zipCode.CityId;
+
+                address.State = zipCode.StateAbbr;
+                address.StateId = zipCode.StateId;
+
+                address.ZipCode = zipCode.Zip;
+
+                address.County = zipCode.County;
+                address.CountyId = zipCode.CountyId;
+
+                address.Country = zipCode.Country;
+                address.CountryId = zipCode.CountryId;
+
+                address.TimeZone = zipCode.TimeZone;
+                address.TimeZoneId = zipCode.TimeZoneId;
 
                 user.Profile.Contact.Address.Add(address);
 
