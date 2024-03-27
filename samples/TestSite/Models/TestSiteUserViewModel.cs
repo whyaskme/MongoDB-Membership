@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TestSite.Models
 {
@@ -36,5 +37,6 @@ namespace TestSite.Models
         public bool LockoutEnabled { get; set; }
 
         public int AccessFailedCount { get; set; }
+
     }
 }

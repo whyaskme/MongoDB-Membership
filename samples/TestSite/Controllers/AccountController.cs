@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TestSite.Services.Identity;
 
 namespace SampleSite.Controllers
 {
@@ -218,6 +219,15 @@ namespace SampleSite.Controllers
             if (ModelState.IsValid)
             {
                 var user = new TestSiteUser { UserName = model.Username, Email = model.Email };
+
+                var emailElements = model.Email.Split('@');
+
+                Email email = new Email();
+                email.UserName = emailElements[0];
+                email.Domain = emailElements[1];
+
+                user.Profile.Contact.Email.Add(email);
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
