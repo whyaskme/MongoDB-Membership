@@ -249,8 +249,8 @@ namespace SampleSite.Controllers
                 var emailElements = model.Email.Split('@');
 
                 TestSite.Services.Identity.Email email = new TestSite.Services.Identity.Email();
-                email.UserName = emailElements[0];
-                email.Domain = emailElements[1];
+                email.UserName = emailElements[0].ToLower();
+                email.Domain = emailElements[1].ToLower();
                 user.Profile.Contact.Email.Add(email);
 
                 var phoneElements = model.Phone.ToString();
@@ -269,7 +269,7 @@ namespace SampleSite.Controllers
                 phone.Number = Int32.Parse(number);
                 user.Profile.Contact.Phone.Add(phone);
 
-                user.PhoneNumber = "( " + areacode + ") " + " " + exchange + "-" + phone;
+                user.PhoneNumber = "( " + areacode + ") " + " " + exchange + "-" + number;
 
                 ZipCode zipCode = utils.GetGeoLocationInfoByZipCode(Int32.Parse(model.Zipcode));
 

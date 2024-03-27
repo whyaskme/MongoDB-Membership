@@ -33,13 +33,13 @@ namespace SampleSite.Identity.AccountViewModels
         [Display(Name = "Address2")]
         public string Address2 { get; set; }
 
-        [Required]
-        [Display(Name = "City")]
-        public string City { get; set; }
+        //[Required]
+        //[Display(Name = "City")]
+        //public string City { get; set; }
 
-        [Required]
-        [Display(Name = "State")]
-        public string State { get; set; }
+        //[Required]
+        //[Display(Name = "State")]
+        //public string State { get; set; }
 
         [Required]
         [Display(Name = "Zipcode")]
