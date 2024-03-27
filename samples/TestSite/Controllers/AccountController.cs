@@ -237,7 +237,17 @@ namespace SampleSite.Controllers
 
                 var user = new MongoDbUser { UserName = model.Username, Email = model.Email };
 
-                user.PhoneNumber = model.Phone;
+                var phoneElements = model.Phone.ToString();
+                phoneElements = phoneElements.Replace("-", "");
+                phoneElements = phoneElements.Replace("(", "");
+                phoneElements = phoneElements.Replace(")", "");
+                phoneElements = phoneElements.Replace(" ", "");
+
+                var areacode = phoneElements.Substring(0, 3);
+                var exchange = phoneElements.Substring(3, 3);
+                var number = phoneElements.Substring(6, 4);
+
+                user.PhoneNumber = "(" + areacode + ") " + exchange + "-" + number;
                 user.PhoneNumberConfirmed = true;
                 user.NormalizedEmail = model.Email.ToUpper();
                 user.NormalizedUserName = model.Username.ToUpper();
@@ -253,23 +263,11 @@ namespace SampleSite.Controllers
                 email.Domain = emailElements[1].ToLower();
                 user.Profile.Contact.Email.Add(email);
 
-                var phoneElements = model.Phone.ToString();
-                phoneElements = phoneElements.Replace("-", "");
-                phoneElements = phoneElements.Replace("(", "");
-                phoneElements = phoneElements.Replace(")", "");
-                phoneElements = phoneElements.Replace(" ", "");
-
-                var areacode = phoneElements.Substring(0, 3);
-                var exchange = phoneElements.Substring(3, 3);
-                var number = phoneElements.Substring(6, 4);
-
                 TestSite.Services.Identity.Phone phone = new TestSite.Services.Identity.Phone();
                 phone.AreaCode = Int32.Parse(areacode);
                 phone.Exchange = Int32.Parse(exchange);
                 phone.Number = Int32.Parse(number);
                 user.Profile.Contact.Phone.Add(phone);
-
-                user.PhoneNumber = "( " + areacode + ") " + " " + exchange + "-" + number;
 
                 ZipCode zipCode = utils.GetGeoLocationInfoByZipCode(Int32.Parse(model.Zipcode));
 
