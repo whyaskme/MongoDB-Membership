@@ -12,20 +12,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TestSite.Services.Identity;
 
+using Facilitate.Libraries.Models;
+using Microsoft.VisualBasic;
+using Claim = Facilitate.Libraries.Models.Claim;
+using System.Collections.Generic;
+using Constants = Facilitate.Libraries.Models.Constants;
+using System.Reflection.Metadata;
+
 namespace SampleSite.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<TestSiteUser> _userManager;
-        private readonly SignInManager<TestSiteUser> _signInManager;
+        private readonly UserManager<MongoDbUser> _userManager;
+        private readonly SignInManager<MongoDbUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
-            UserManager<TestSiteUser> userManager,
-            SignInManager<TestSiteUser> signInManager,
+            UserManager<MongoDbUser> userManager,
+            SignInManager<MongoDbUser> signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
@@ -218,15 +225,57 @@ namespace SampleSite.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new TestSiteUser { UserName = model.Username, Email = model.Email };
+                var user = new MongoDbUser { UserName = model.Username, Email = model.Email };
 
                 var emailElements = model.Email.Split('@');
 
-                Email email = new Email();
+                TestSite.Services.Identity.Email email = new TestSite.Services.Identity.Email();
                 email.UserName = emailElements[0];
                 email.Domain = emailElements[1];
 
                 user.Profile.Contact.Email.Add(email);
+
+                // Add user roles
+                user.Roles.Add(Constants.UserRoles.SystemAdministrator.Item1.ToString());
+                user.Roles.Add(Constants.UserRoles.SiteAdministrator.Item1.ToString());
+                user.Roles.Add(Constants.UserRoles.GroupAdministrator.Item1.ToString());
+                user.Roles.Add(Constants.UserRoles.ProjectSupervisor.Item1.ToString());
+                user.Roles.Add(Constants.UserRoles.ProjectManager.Item1.ToString());
+                user.Roles.Add(Constants.UserRoles.Homeowner.Item1.ToString());
+                user.Roles.Add(Constants.UserRoles.Consumer.Item1.ToString());
+
+                foreach (var role in user.Roles)
+                {
+                    var currentRoleValue = "";
+                    var userId = user.Id.ToString();
+
+                    switch (role)
+                    {
+                        case "66030593a266bc0d03e368c8":
+                            currentRoleValue = Constants.UserRoles.SystemAdministrator.Item2.ToString();
+                            break;
+                        case "660305aaa266bc0d03e368c9":
+                            currentRoleValue = Constants.UserRoles.SiteAdministrator.Item2.ToString();
+                            break;
+                        case "660305b4a266bc0d03e368ca":
+                            currentRoleValue = Constants.UserRoles.GroupAdministrator.Item2.ToString();
+                            break;
+                        case "660305bea266bc0d03e368cb":
+                            currentRoleValue = Constants.UserRoles.ProjectSupervisor.Item2.ToString();
+                            break;
+                        case "660305c8a266bc0d03e368cc":
+                            currentRoleValue = Constants.UserRoles.ProjectManager.Item2.ToString();
+                            break;
+                        case "660305d1a266bc0d03e368cd":
+                            currentRoleValue = Constants.UserRoles.Homeowner.Item2.ToString();
+                            break;
+                        case "660305d9a266bc0d03e368ce":
+                            currentRoleValue = Constants.UserRoles.Consumer.Item2.ToString();
+                            break;
+                    }
+
+                    user.Claims.Add(new IdentityUserClaim<string> { UserId = userId, ClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role", ClaimValue = currentRoleValue });
+                }
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -317,7 +366,7 @@ namespace SampleSite.Controllers
                 {
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
-                var user = new TestSiteUser { UserName = model.Email, Email = model.Email };
+                var user = new MongoDbUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

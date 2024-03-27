@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace TestSite.Models
 {
-    public class TestSiteUserViewModel
+    public class MongoDbUserViewModel
     {
-        public TestSiteUserViewModel()
+        public MongoDbUserViewModel()
         { }
 
         public string Id { get; set; }

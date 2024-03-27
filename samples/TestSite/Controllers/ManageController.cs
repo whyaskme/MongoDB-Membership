@@ -19,8 +19,8 @@ namespace SampleSite.Controllers
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
-        private readonly UserManager<TestSiteUser> _userManager;
-        private readonly SignInManager<TestSiteUser> _signInManager;
+        private readonly UserManager<MongoDbUser> _userManager;
+        private readonly SignInManager<MongoDbUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
@@ -29,8 +29,8 @@ namespace SampleSite.Controllers
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
 
         public ManageController(
-          UserManager<TestSiteUser> userManager,
-          SignInManager<TestSiteUser> signInManager,
+          UserManager<MongoDbUser> userManager,
+          SignInManager<MongoDbUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
           UrlEncoder urlEncoder)
@@ -526,7 +526,7 @@ namespace SampleSite.Controllers
                 unformattedKey);
         }
 
-        private async Task LoadSharedKeyAndQrCodeUriAsync(TestSiteUser user, EnableAuthenticatorViewModel model)
+        private async Task LoadSharedKeyAndQrCodeUriAsync(MongoDbUser user, EnableAuthenticatorViewModel model)
         {
             var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
             if (string.IsNullOrEmpty(unformattedKey))

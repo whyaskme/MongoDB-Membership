@@ -1,7 +1,7 @@
 @using SampleSite.Identity
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<TestSiteUser> SignInManager
-@inject UserManager<TestSiteUser> UserManager
+@inject SignInManager<MongoDbUser> SignInManager
+@inject UserManager<MongoDbUser> UserManager
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))

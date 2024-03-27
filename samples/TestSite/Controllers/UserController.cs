@@ -13,14 +13,14 @@ namespace SampleSite.Controllers
     //[Authorize(Roles = "user")]
     public class UserController : Controller
     {
-        private readonly UserManager<TestSiteUser> _userManager;
+        private readonly UserManager<MongoDbUser> _userManager;
         private readonly RoleManager<MongoRole> _roleManager;
-        readonly IMongoCollection<TestSiteUser> _userUserCollection;
+        readonly IMongoCollection<MongoDbUser> _userUserCollection;
 
         public UserController(
-            UserManager<TestSiteUser> userManager,
+            UserManager<MongoDbUser> userManager,
             RoleManager<MongoRole> roleManager,
-            IMongoCollection<TestSiteUser> userCollection)
+            IMongoCollection<MongoDbUser> userCollection)
         {
             _roleManager = roleManager;
             _userManager = userManager;
@@ -68,7 +68,7 @@ namespace SampleSite.Controllers
 
             if (user == null) return NotFound();
 
-            var model = new TestSiteUserViewModel
+            var model = new MongoDbUserViewModel
             {
                 Id = user.Id.ToString(),
                 AccessFailedCount = user.AccessFailedCount,
@@ -92,7 +92,7 @@ namespace SampleSite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(TestSiteUserViewModel model)
+        public async Task<ActionResult> Edit(MongoDbUserViewModel model)
         {
             var user = await _userManager.FindByIdAsync(model.Id);
 
