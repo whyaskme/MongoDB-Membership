@@ -227,13 +227,38 @@ namespace SampleSite.Controllers
             {
                 var user = new MongoDbUser { UserName = model.Username, Email = model.Email };
 
+                user.PhoneNumber = model.Phone;
+                user.PhoneNumberConfirmed = true;
+                user.NormalizedEmail = model.Email.ToUpper();
+                user.NormalizedUserName = model.Username.ToUpper();
+                user.EmailConfirmed = true;
+
+                user.Profile.FirstName = model.FirstName;
+                user.Profile.LastName = model.LastName;
+
                 var emailElements = model.Email.Split('@');
 
                 TestSite.Services.Identity.Email email = new TestSite.Services.Identity.Email();
                 email.UserName = emailElements[0];
                 email.Domain = emailElements[1];
-
                 user.Profile.Contact.Email.Add(email);
+
+                var phoneElements = model.Phone.ToString();
+                phoneElements = phoneElements.Replace("-", "");
+                phoneElements = phoneElements.Replace("(", "");
+                phoneElements = phoneElements.Replace(")", "");
+                phoneElements = phoneElements.Replace(" ", "");
+
+                var areacode = phoneElements.Substring(0, 3);
+                var exchange = phoneElements.Substring(3, 3);
+                var number = phoneElements.Substring(6, 4);
+
+                TestSite.Services.Identity.Phone phone = new TestSite.Services.Identity.Phone();
+                phone.AreaCode = Int32.Parse(areacode);
+                phone.Exchange = Int32.Parse(exchange);
+                phone.Number = Int32.Parse(number);
+
+                user.Profile.Contact.Phone.Add(phone);
 
                 // Add user roles
                 user.Roles.Add(Constants.UserRoles.SystemAdministrator.Item1.ToString());

@@ -12,11 +12,11 @@ namespace TestSite.Services.Identity
             ExpireDate = DateTime.MaxValue;
             DeviceType = 0;
             IsLoggedIn = false;
-            Title = "Unknown";
-            FirstName = "Unknown";
-            MiddleName = "Unknown";
-            LastName = "Unknown";
-            Suffix = "Unknown";
+            Title = "";
+            FirstName = "";
+            MiddleName = "";
+            LastName = "";
+            Suffix = "";
             Gender = 0;
 
             Contact = new ContactInfo();
