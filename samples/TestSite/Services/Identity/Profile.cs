@@ -7,7 +7,7 @@ namespace TestSite.Services.Identity
     {
         public Profile()
         {
-            RegistrationDate = DateTime.Now;
+            RegistrationDate = DateTime.UtcNow;
             Expired = false;
             ExpireDate = DateTime.MaxValue;
             DeviceType = 0;
